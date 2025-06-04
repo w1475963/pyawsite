@@ -1,0 +1,54 @@
+# Python 编译文件
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 虚拟环境
+venv/
+env/
+.venv/
+*.egg-info/
+dist/
+build/
+
+# 数据库文件（开发环境 SQLite）
+db.sqlite3
+*.sqlite3
+
+# 环境变量文件（敏感信息）
+.env
+.env.*
+
+# 媒体文件和静态文件（通常由服务器管理，不建议提交）
+media/
+staticfiles/  # 若使用 collectstatic 生成的静态文件目录
+# 若需保留项目内自定义静态文件，可注释下方两行（谨慎操作）
+# static/
+# static/**/*.* !static/.gitkeep
+
+# Django 配置缓存
+*.log
+*.pot
+
+# IDE 配置
+.idea/
+.vscode/
+*.iml
+*.pydevproject
+*.editorconfig
+
+# 临时文件
+*.tmp
+*.swp
+*.bak
+*.orig
+*~
+.#*
+
+# 生产环境配置（如 wsgi.py 部署相关，但通常需提交）
+# *.wsgi.py  # 若无需提交可取消注释
+
+# 示例：忽略特定目录下的文件（如测试数据）
+# tests/data/
+
+# 自定义忽略规则（根据项目需求添加）
