@@ -1,3 +1,6 @@
+/repos/
+/static/dist/
+
 # Python 编译文件
 __pycache__/
 *.py[cod]

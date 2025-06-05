@@ -1,0 +1,3 @@
+python-dotenv
+djangorestframework
+djangorestframework-simplejwt
