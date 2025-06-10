@@ -15,12 +15,37 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from django.views.static import serve
+from rest_framework.schemas import get_schema_view
+from rest_framework import permissions
+
+from pyawsite.repo_applications import get_urls
+
+
+schema_view = get_schema_view(
+    title="Pyawsite API",
+    description="API Documentation",
+    version="0.0.1",
+    authentication_classes=[],
+    permission_classes=[permissions.AllowAny],
+)
 
 urlpatterns = [
+    path("schema/", schema_view, name="openapi-schema"),
     path("admin/", admin.site.urls),
     path("api/user/", include("OAuth.urls")),
-    path("api/daily_todos/",include("daily_todos.urls")),
+    path("api/daily_todos/", include("daily_todos.urls")),
     path("api/ws_sys/", include("ws_sys.urls")),
-]
+
+    *get_urls(),
+    path(
+        'robots.txt',
+        serve,
+        {'document_root': settings.STATIC_ROOT, 'path': 'robots.txt'},
+        name='robots.txt'
+    ),
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

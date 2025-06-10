@@ -10,8 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
-from pathlib import Path
 import os
+from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -32,6 +33,7 @@ ALLOWED_HOSTS = ["lantdh.pythonanywhere.com", "localhost", "127.0.0.1"]
 # Application definition
 
 INSTALLED_APPS = [
+    "corsheaders",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -46,6 +48,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -134,3 +137,41 @@ MEDIA_ROOT = os.getenv("DJANGO_MEDIA_ROOT")
 MEDIA_URL = "/media/"
 STATIC_ROOT = os.getenv("DJANGO_STATIC_ROOT")
 STATIC_URL = "/static/"
+STATICFILES_DIRS = [
+    "assets",
+]
+
+
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "OAuth.authentication.AdminLongTermTokenAuthentication",
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+    ],
+    "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.openapi.AutoSchema",
+}
+
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=1),  # 访问令牌有效期
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),  # 刷新令牌有效期
+    "USER_ID_FIELD": "id",
+    "USER_ID_CLAIM": "user_id",
+    "ALGORITHM": "HS256",
+    "SIGNING_KEY": os.getenv("DJANGO_SECRET_KEY"),
+    "AUTH_HEADER_TYPES": ("Bearer",),
+}
+
+
+if os.getenv("IS_WEB", "0") != "0" and os.getenv("DJANGO_DEBUG", "0") != "0":
+    CORS_ALLOWED_ORIGINS = [
+        # "https://example.com",  # 允许的前端域名（可写多个）
+        # "https://sub.example.com",
+        "http://localhost:3000",  # 开发环境（React/Vue 常用端口）
+        "http://127.0.0.1:8000",
+    ]
+else:
+    CORS_ALLOW_ALL_ORIGINS = True

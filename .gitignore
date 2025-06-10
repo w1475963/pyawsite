@@ -1,5 +1,7 @@
 /repos/
-/static/dist/
+/static/
+/local_update.sh
+/openapi.yaml
 
 # Python 编译文件
 __pycache__/
